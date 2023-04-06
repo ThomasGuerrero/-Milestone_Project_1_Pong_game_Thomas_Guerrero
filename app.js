@@ -11,9 +11,21 @@ ctx.fillRect(x, y, w, h);
 //creating our ball
 const pongBall = document.getElementById('pongBall')
 
+const ball = {
+    x: 500,
+    y: 380,
+    radius: 15,
+    color: 'white',
+    draw() {
+        ctx.beginPath(),
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true),
+        ctx.closePath();
+        ctx.fillStyle = this.color,
+        ctx.fill()
+    },
+};
 
-
-
+ball.draw()
 
 //creating our user and bot
 const user = {
@@ -38,5 +50,20 @@ drawRect(user.x, user.y, user.width, user.height, user.color);
 drawRect(bot.x, bot.y, bot.width, bot.height, bot.color);
 
 //creating the pong net
+const net = {
+    x: 200,
+    y: 0,
+    width: 2,
+    height: 10,
+    color: 'white'
+}
 
+function drawNet() {
+    for (let i = 0; i <= canvas.height; i +=15){
+        drawRect(net.x, net.y + i, net.width, net.height. net.color);
+    }
+};
+
+
+//drawing the score board
 
