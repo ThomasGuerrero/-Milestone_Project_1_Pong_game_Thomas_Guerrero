@@ -2,3 +2,7 @@
     border: solid black;
     background-color: black;
 }
+
+#pongBall {
+    width: 50px;
+}

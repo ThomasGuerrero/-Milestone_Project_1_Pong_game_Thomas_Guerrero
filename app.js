@@ -8,8 +8,12 @@ ctx.fillStyle = color;
 ctx.fillRect(x, y, w, h);
 }
 
-// drawRect(10, 300, 25, 130, 'white')
-// drawRect(900, 300, 25, 130, 'white')
+//creating our ball
+const pongBall = document.getElementById('pongBall')
+
+
+
+
 
 //creating our user and bot
 const user = {
@@ -34,4 +38,5 @@ drawRect(user.x, user.y, user.width, user.height, user.color);
 drawRect(bot.x, bot.y, bot.width, bot.height, bot.color);
 
 //creating the pong net
+
 
