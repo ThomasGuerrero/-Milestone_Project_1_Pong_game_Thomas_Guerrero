@@ -1,8 +1,5 @@
 #game {
     border: solid black;
-    background-color: black;
+    background-color: rgb(219, 124, 79);
 }
 
-#pongBall {
-    width: 50px;
-}

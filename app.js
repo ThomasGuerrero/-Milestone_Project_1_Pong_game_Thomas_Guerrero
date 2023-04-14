@@ -2,14 +2,20 @@
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d')
 
-//creating our rectangle function
-function drawRect(x, y, w, h, color){
+// creating our rectangle function
+function drawPlayer(x, y, w, h, color){
 ctx.fillStyle = color;
 ctx.fillRect(x, y, w, h);
 };
-//creating our user and bot
-const user = {
-    x: 15,
+
+function drawRect(x, y, w, h, color){
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+    };
+
+// creating our players
+var playerOne = {
+    x: 1,
     y: canvas.height/2.5,
     width: 25,
     height: 130,
@@ -17,8 +23,8 @@ const user = {
     score: 0,
 };
 
-const bot = {
-    x: canvas.width/1.04,
+var playerTwo = {
+    x: canvas.width - 25,
     y: canvas.height/2.5,
     width: 25,
     height: 130,
@@ -26,70 +32,135 @@ const bot = {
     score: 0,
 };
 
-//this will be the user rectangle
-drawRect(user.x, user.y, user.width, user.height, user.color);
-//this will be the bot rectangle
-drawRect(bot.x, bot.y, bot.width, bot.height, bot.color);
+
+//allowing our paddles to move with arrow keys
+document.addEventListener('keydown', keyUpHandler, false);
+document.addEventListener('keyup', keyDownHandler, false);
+
+var upPressed = false;
+var downPressed = false;
+
+function keyUpHandler(e) {
+    if(e.key == "Down" || e.key == "ArrowDown") {
+        upPressed = true;
+    }
+    else if(e.key == "Up" || e.key == "ArrowUp") {
+        downPressed = true;
+    } 
+}
+
+function keyDownHandler(e) {
+    if(e.key == "Down" || e.key == "ArrowDown") {
+        upPressed = false;
+    }
+    else if(e.key == "Up" || e.key == "ArrowUp") {
+        downPressed = false;
+    }
+};
+
 
 //creating our ball
-const pongBall = document.getElementById('pongBall')
-
-function drawCircle(x, y, r, color){
-    ctx.fillStyle = color,
+function drawBall() {
     ctx.beginPath(),
-    ctx.arc(x, y, r, 0, Math.PI*2, false),
-    ctx.closePath(),
-    ctx.fill();
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true),
+    ctx.closePath();
+    ctx.fillStyle = ball.color,
+    ctx.fill()
 }
 
-const ball = {
-    x: 500,
-    y: 380,
+var ball = {
+    x: canvas.width/2 + 4,
+    y: canvas.height/2 - 5,
     radius: 15,
     color: 'white',
-    draw() {
-        ctx.beginPath(),
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true),
-        ctx.closePath();
-        ctx.fillStyle = this.color,
-        ctx.fill()
-    },
 };
 
-ball.draw()
 
-// drawing the scoreboard
-function drawText(text, x, y, color){
-    ctx.fillStyle = color,
-    ctx.font = '50px sans serif',
-    ctx.fillText(text, x, y)
+
+
+//creating the pong net
+const net = {
+    x: 500,
+    y: 0,
+    width: 10,
+    height: 35,
+    color: 'white'
 }
 
-
-
-// //creating the pong net
-// const net = {
-//     x: 200,
-//     y: 0,
-//     width: 2,
-//     height: 10,
-//     color: 'white'
-// }
-
-// function drawNet() {
-//     for (let i = 0; i <= canvas.height; i +=15){
-//         drawRect(net.x, net.y + i, net.width, net.height. net.color);
-//     }
-// };
-
-// // drawNet()
-
-// //drawing the score board
+    
+//drawing the score board
 function drawText(text,x,y, color){
     ctx.fillStyle = color;
     ctx.font = "90px Source Sans Pro";
     ctx.fillText(text, x, y);
 }
 
-drawText(user.score, 300, 120, 'white');
-drawText(bot.score, 650, 120, 'white');
+
+
+//movement
+var dx = 2;
+var dy = 2;
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawPlayer(playerOne.x, playerOne.y, playerOne.width, playerOne.height, playerOne.color);
+    drawPlayer(playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height, playerTwo.color);
+    drawBall();
+    drawText(playerOne.score, 300, 120, 'white');
+    drawText(playerTwo.score, 650, 120, 'white');
+
+    if(ball.x + dx < ball.radius) {
+        dx = -dx;
+    }
+    if(ball.y + dy > canvas.height-ball.radius || ball.y + dy < ball.radius) {
+        dy = -dy;
+    } 
+    else if(ball.x + dx > canvas.width-ball.radius) {
+        if(ball.y > playerOne.y && ball.y < playerOne.y + playerOne.width) {
+            dx = -dx;
+        } 
+        else {
+            alert("GAME OVER");
+            document.location.reload();
+            clearInterval(interval); // Needed for Chrome to end game
+        }
+    }
+
+
+    
+    if(upPressed) {
+        playerOne.y += 3;
+        if (playerOne.y + playerOne.height > canvas.height){
+            playerOne.y = canvas.height - playerOne.height;
+        }
+    }
+    else if(downPressed) {
+        playerOne.y -= 3;
+        if (playerOne.y < 0){
+            playerOne.y = 0;
+        }
+    }
+
+    if(upPressed) {
+        playerTwo.y += 3;
+        if (playerTwo.y + playerTwo.height > canvas.height){
+            playerTwo.y = canvas.height - playerTwo.height;
+        }
+    }
+    else if(downPressed) {
+        playerTwo.y -= 3;
+        if (playerTwo.y < 0){
+            playerTwo.y = 0;
+        }
+    }
+
+    ball.x += dx;
+    ball.y += dy;
+
+    for (let i = 0; i <= canvas.height; i+=50){
+        drawRect(net.x, net.y + i, net.width, net.height, net.color);
+    }
+
+}; 
+
+var interval = setInterval(draw, 10);
