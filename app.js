@@ -15,7 +15,7 @@ function drawRect(x, y, w, h, color){
 
 // creating our players
 var playerOne = {
-    x: 1,
+    x: 0.5,
     y: canvas.height/2.5,
     width: 25,
     height: 130,
@@ -89,10 +89,15 @@ const net = {
 
     
 //drawing the score board
-function drawText(text,x,y, color){
-    ctx.fillStyle = color;
+function drawPlayerOneScore(){
+    ctx.fillStyle = playerOne.color;
     ctx.font = "90px Source Sans Pro";
-    ctx.fillText(text, x, y);
+    ctx.fillText(`${playerOne.score}`, 300, 120);
+}
+function drawPlayerTwoScore(){
+    ctx.fillStyle = playerTwo.color;
+    ctx.font = "90px Source Sans Pro";
+    ctx.fillText(`${playerTwo.score}`, 650, 120);
 }
 
 //paddle collision detection
@@ -104,6 +109,7 @@ function collision() {
         ball.y < playerOne.y + playerOne.height
     ) {
         dx = -dx;
+        playerOne.score++;
     } 
     if (
         ball.x > playerTwo.x &&
@@ -112,6 +118,7 @@ function collision() {
         ball.y < playerTwo.y + playerTwo.height
     ) {
         dx = -dx;
+        playerTwo.score++;
     }; }
 
 
@@ -121,32 +128,33 @@ function collision() {
 var dx = 2;
 var dy = 2;
 
+//rendering everything into the browser
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawPlayer(playerOne.x, playerOne.y, playerOne.width, playerOne.height, playerOne.color);
     drawPlayer(playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height, playerTwo.color);
     drawBall();
-    drawText(playerOne.score, 300, 120, 'white');
-    drawText(playerTwo.score, 650, 120, 'white');
+    drawPlayerOneScore();
+    drawPlayerTwoScore();
     collision();
 
-    if(ball.x + dx > canvas.width-ball.radius || ball.x + dx < ball.radius) {
+    //ball collision with canvas 
+    if(ball.x + dx < ball.radius) {
         dx = -dx;
     }
     if(ball.y + dy > canvas.height-ball.radius || ball.y + dy < ball.radius) {
         dy = -dy;
     } 
-    // else if(ball.x + dx > canvas.width-ball.radius) {
-        // if(ball.y > playerOne.y && ball.y < playerOne.y + playerOne.width) {
-        //     dx = -dx;
-        // } 
-    //     else {
-    //         alert("GAME OVER");
-    //         document.location.reload();
-    //         clearInterval(interval); // Needed for Chrome to end game
-    //     }
-    // }
-    
+    else if(ball.x + dx > canvas.width-ball.radius) {
+        if(ball.y > playerOne.y && ball.y < playerOne.y + playerOne.width) {
+            dx = -dx;
+        } 
+        else {
+            alert("GAME OVER");
+            document.location.reload();
+            clearInterval(interval); // Needed for Chrome to end game
+        }
+    }
     if(upPressed) {
         playerOne.y += 3;
         if (playerOne.y + playerOne.height > canvas.height){
@@ -176,6 +184,7 @@ function draw() {
     ball.x += dx;
     ball.y += dy;
 
+    //rendering the net 
     for (let i = 0; i <= canvas.height; i+=50){
         drawRect(net.x, net.y + i, net.width, net.height, net.color);
     }
