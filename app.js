@@ -1,17 +1,13 @@
 //creating the base background for the game
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d')
-
-// creating our rectangle function
+// creating the player
 function drawPlayer(x, y, w, h, color){
 ctx.fillStyle = color;
 ctx.fillRect(x, y, w, h);
 };
 
-function drawRect(x, y, w, h, color){
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);
-    };
+
 
 // creating our players
 var playerOne = {
@@ -39,6 +35,8 @@ document.addEventListener('keyup', keyDownHandler, false);
 
 var upPressed = false;
 var downPressed = false;
+var wPressed = false;
+var sPressed = false;
 
 function keyUpHandler(e) {
     if(e.key == "Down" || e.key == "ArrowDown") {
@@ -47,6 +45,13 @@ function keyUpHandler(e) {
     else if(e.key == "Up" || e.key == "ArrowUp") {
         downPressed = true;
     } 
+    if(e.key == 83 || e.key == 's') {
+        wPressed = true;
+    }
+    else if(e.key == 87 || e.key == 'w') {
+        sPressed = true;
+    } 
+
 }
 
 function keyDownHandler(e) {
@@ -56,10 +61,16 @@ function keyDownHandler(e) {
     else if(e.key == "Up" || e.key == "ArrowUp") {
         downPressed = false;
     }
+    if(e.key == 83 || e.key == 's') {
+        wPressed = false;
+    }
+    else if(e.key == 87 || e.key == 'w') {
+        sPressed = false;
+    } 
 }
 
 
-//creating our ball
+//creating the pong ball
 function drawBall() {
     ctx.beginPath(),
     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2, true),
@@ -75,10 +86,11 @@ var ball = {
     color: 'white',
 }
 
-
-
-
 //creating the pong net
+function drawRect(x, y, w, h, color){
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+    };
 const net = {
     x: 500,
     y: 0,
@@ -100,8 +112,15 @@ function drawPlayerTwoScore(){
     ctx.fillText(`${playerTwo.score}`, 650, 120);
 }
 
-//paddle collision detection
+//function to reset the ball after a point is claimed 
+function resetBall(){
+    ball.x = canvas.width/2 + 4,
+    ball.y = canvas.height/2 - 5
+}
+
+//collision detection
 function collision() {
+    //both players paddle collision
     if (
         ball.x > playerOne.x &&
         ball.x < playerOne.x + playerOne.width &&
@@ -118,6 +137,8 @@ function collision() {
     ) {
         dx = -dx;
     } 
+
+    //ball collision
     if(ball.x - ball.radius < 0-ball.radius || ball.x + dx < ball.radius){
         dx = -dx;
         playerTwo.score = playerTwo.score + 1;
@@ -129,11 +150,15 @@ function collision() {
         playerOne.score = playerOne.score + 1;
         resetBall();
     }
+    
     if(ball.y + dy > canvas.height-ball.radius || ball.y + dy < ball.radius) {
         dy = -dy;
 
-
+    //win condition for both players
     }
+        ball.x += dx;
+        ball.y += dy;
+      
     if (playerOne.score === 3) {
         alert('Winner is player One')
         document.location.reload();
@@ -145,39 +170,33 @@ function collision() {
     }
     }
 
-function resetBall(){
-    ball.x = canvas.width/2 + 4,
-    ball.y = canvas.height/2 - 5,
-    dx = -dx
-}
+
 
 
  
 
-//movement
+//pong ball velocity
 var dx = 2;
 var dy = 2;
 
 //rendering everything into the browser
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
     drawPlayer(playerOne.x, playerOne.y, playerOne.width, playerOne.height, playerOne.color);
     drawPlayer(playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height, playerTwo.color);
     drawBall();
     drawPlayerOneScore();
     drawPlayerTwoScore();
     collision();
-    // resetBall();
-
-    //ball collision with canvas 
     
-    if(upPressed) {
+    if(wPressed) {
         playerOne.y += 3;
         if (playerOne.y + playerOne.height > canvas.height){
             playerOne.y = canvas.height - playerOne.height;
         }
     }
-    else if(downPressed) {
+    else if(sPressed) {
         playerOne.y -= 3;
         if (playerOne.y < 0){
             playerOne.y = 0;
@@ -197,10 +216,7 @@ function draw() {
         }
     }
 
-    ball.x += dx;
-    ball.y += dy;
-
-    //rendering the net 
+    //applying the net
     for (let i = 0; i <= canvas.height; i+=50){
         drawRect(net.x, net.y + i, net.width, net.height, net.color);
     }
