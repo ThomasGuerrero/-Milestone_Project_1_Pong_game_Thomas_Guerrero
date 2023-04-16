@@ -109,7 +109,6 @@ function collision() {
         ball.y < playerOne.y + playerOne.height
     ) {
         dx = -dx;
-        playerOne.score++;
     } 
     if (
         ball.x > playerTwo.x &&
@@ -118,11 +117,38 @@ function collision() {
         ball.y < playerTwo.y + playerTwo.height
     ) {
         dx = -dx;
-        playerTwo.score++;
-    }; }
+    } 
+    if(ball.x - ball.radius < 0-ball.radius || ball.x + dx < ball.radius){
+        dx = -dx;
+        playerTwo.score = playerTwo.score + 1;
+        
+    }
+
+    if(ball.x + dx > 1000-ball.radius || ball.x + dx < ball.radius) {
+        dx = -dx;
+        playerOne.score = playerOne.score + 1;
+        
+    }
+    if(ball.y + dy > canvas.height-ball.radius || ball.y + dy < ball.radius) {
+        dy = -dy;
+
+
+    }
+    if (playerOne.score === 3) {
+        alert('Winner is player One')
+        document.location.reload();
+        clearInterval(interval);
+    } else if (playerTwo.score === 3) {
+        alert('Winner is player Two')
+        document.location.reload();
+        clearInterval(interval);
+    }
+    }
 
 
 
+
+ 
 
 //movement
 var dx = 2;
@@ -137,24 +163,10 @@ function draw() {
     drawPlayerOneScore();
     drawPlayerTwoScore();
     collision();
+    // resetBall();
 
     //ball collision with canvas 
-    if(ball.x + dx < ball.radius) {
-        dx = -dx;
-    }
-    if(ball.y + dy > canvas.height-ball.radius || ball.y + dy < ball.radius) {
-        dy = -dy;
-    } 
-    else if(ball.x + dx > canvas.width-ball.radius) {
-        if(ball.y > playerOne.y && ball.y < playerOne.y + playerOne.width) {
-            dx = -dx;
-        } 
-        else {
-            alert("GAME OVER");
-            document.location.reload();
-            clearInterval(interval); // Needed for Chrome to end game
-        }
-    }
+    
     if(upPressed) {
         playerOne.y += 3;
         if (playerOne.y + playerOne.height > canvas.height){
