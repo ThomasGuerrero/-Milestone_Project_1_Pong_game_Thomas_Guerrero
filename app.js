@@ -56,7 +56,7 @@ function keyDownHandler(e) {
     else if(e.key == "Up" || e.key == "ArrowUp") {
         downPressed = false;
     }
-};
+}
 
 
 //creating our ball
@@ -73,7 +73,7 @@ var ball = {
     y: canvas.height/2 - 5,
     radius: 15,
     color: 'white',
-};
+}
 
 
 
@@ -95,6 +95,26 @@ function drawText(text,x,y, color){
     ctx.fillText(text, x, y);
 }
 
+//paddle collision detection
+function collision() {
+    if (
+        ball.x > playerOne.x &&
+        ball.x < playerOne.x + playerOne.width &&
+        ball.y > playerOne.y &&
+        ball.y < playerOne.y + playerOne.height
+    ) {
+        dx = -dx;
+    } 
+    if (
+        ball.x > playerTwo.x &&
+        ball.x < playerTwo.x + playerTwo.width &&
+        ball.y > playerTwo.y &&
+        ball.y < playerTwo.y + playerTwo.height
+    ) {
+        dx = -dx;
+    }; }
+
+
 
 
 //movement
@@ -108,25 +128,24 @@ function draw() {
     drawBall();
     drawText(playerOne.score, 300, 120, 'white');
     drawText(playerTwo.score, 650, 120, 'white');
+    collision();
 
-    if(ball.x + dx < ball.radius) {
+    if(ball.x + dx > canvas.width-ball.radius || ball.x + dx < ball.radius) {
         dx = -dx;
     }
     if(ball.y + dy > canvas.height-ball.radius || ball.y + dy < ball.radius) {
         dy = -dy;
     } 
-    else if(ball.x + dx > canvas.width-ball.radius) {
-        if(ball.y > playerOne.y && ball.y < playerOne.y + playerOne.width) {
-            dx = -dx;
-        } 
-        else {
-            alert("GAME OVER");
-            document.location.reload();
-            clearInterval(interval); // Needed for Chrome to end game
-        }
-    }
-
-
+    // else if(ball.x + dx > canvas.width-ball.radius) {
+        // if(ball.y > playerOne.y && ball.y < playerOne.y + playerOne.width) {
+        //     dx = -dx;
+        // } 
+    //     else {
+    //         alert("GAME OVER");
+    //         document.location.reload();
+    //         clearInterval(interval); // Needed for Chrome to end game
+    //     }
+    // }
     
     if(upPressed) {
         playerOne.y += 3;
