@@ -121,13 +121,13 @@ function collision() {
     if(ball.x - ball.radius < 0-ball.radius || ball.x + dx < ball.radius){
         dx = -dx;
         playerTwo.score = playerTwo.score + 1;
-        
+        resetBall();
     }
 
     if(ball.x + dx > 1000-ball.radius || ball.x + dx < ball.radius) {
         dx = -dx;
         playerOne.score = playerOne.score + 1;
-        
+        resetBall();
     }
     if(ball.y + dy > canvas.height-ball.radius || ball.y + dy < ball.radius) {
         dy = -dy;
@@ -145,7 +145,11 @@ function collision() {
     }
     }
 
-
+function resetBall(){
+    ball.x = canvas.width/2 + 4,
+    ball.y = canvas.height/2 - 5,
+    dx = -dx
+}
 
 
  
