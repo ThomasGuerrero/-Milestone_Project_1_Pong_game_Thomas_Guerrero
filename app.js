@@ -1,13 +1,12 @@
 //creating the base background for the game
 const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d')
+const ctx = canvas.getContext('2d');
+
 // creating the player
 function drawPlayer(x, y, w, h, color){
 ctx.fillStyle = color;
 ctx.fillRect(x, y, w, h);
 };
-
-
 
 // creating our players
 var playerOne = {
@@ -28,7 +27,6 @@ var playerTwo = {
     score: 0,
 };
 
-
 //allowing our paddles to move with arrow keys
 document.addEventListener('keydown', keyUpHandler, false);
 document.addEventListener('keyup', keyDownHandler, false);
@@ -39,10 +37,10 @@ var wPressed = false;
 var sPressed = false;
 
 function keyUpHandler(e) {
-    if(e.key == "Down" || e.key == "ArrowDown") {
+    if(e.key == 'Down' || e.key == 'ArrowDown') {
         upPressed = true;
     }
-    else if(e.key == "Up" || e.key == "ArrowUp") {
+    else if(e.key == 'Up' || e.key == 'ArrowUp') {
         downPressed = true;
     } 
     if(e.key == 83 || e.key == 's') {
@@ -55,10 +53,10 @@ function keyUpHandler(e) {
 }
 
 function keyDownHandler(e) {
-    if(e.key == "Down" || e.key == "ArrowDown") {
+    if(e.key == 'Down' || e.key == 'ArrowDown') {
         upPressed = false;
     }
-    else if(e.key == "Up" || e.key == "ArrowUp") {
+    else if(e.key == 'Up' || e.key == 'ArrowUp') {
         downPressed = false;
     }
     if(e.key == 83 || e.key == 's') {
@@ -68,7 +66,6 @@ function keyDownHandler(e) {
         sPressed = false;
     } 
 }
-
 
 //creating the pong ball
 function drawBall() {
@@ -86,6 +83,10 @@ var ball = {
     color: 'white',
 }
 
+//pong ball velocity
+var dx = 3;
+var dy = 3;
+
 //creating the pong net
 function drawRect(x, y, w, h, color){
     ctx.fillStyle = color;
@@ -99,16 +100,15 @@ const net = {
     color: 'white'
 }
 
-    
 //drawing the score board
 function drawPlayerOneScore(){
     ctx.fillStyle = playerOne.color;
-    ctx.font = "90px Source Sans Pro";
+    ctx.font = '90px Source Sans Pro';
     ctx.fillText(`${playerOne.score}`, 300, 120);
 }
 function drawPlayerTwoScore(){
     ctx.fillStyle = playerTwo.color;
-    ctx.font = "90px Source Sans Pro";
+    ctx.font = '90px Source Sans Pro';
     ctx.fillText(`${playerTwo.score}`, 650, 120);
 }
 
@@ -170,19 +170,9 @@ function collision() {
     }
     }
 
-
-
-
- 
-
-//pong ball velocity
-var dx = 2;
-var dy = 2;
-
 //rendering everything into the browser
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
     drawPlayer(playerOne.x, playerOne.y, playerOne.width, playerOne.height, playerOne.color);
     drawPlayer(playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height, playerTwo.color);
     drawBall();
@@ -216,7 +206,7 @@ function draw() {
         }
     }
 
-    //applying the net
+    //applying the net 
     for (let i = 0; i <= canvas.height; i+=50){
         drawRect(net.x, net.y + i, net.width, net.height, net.color);
     }
@@ -224,3 +214,6 @@ function draw() {
 }; 
 
 var interval = setInterval(draw, 10);
+
+
+

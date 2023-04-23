@@ -1,1 +1,184 @@
-I have decided to create a pong web browser game with utilizing the Canvas Api.
+I have decided to create a pong web browser game with utilizing the Canvas Api. The game controls are located within the actual browser and are presented below the game.
+
+The citations I have included will show the source code I used to embelish off of my own code and it will give the github repository.
+
+Citations:
+
+Code Explained (2018), Ping-Pong-Game-JavaScript [
+    function drawRect(x, y, w, h, color){
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+}]. https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript/blob/master/pong.js
+
+
+Code Explained (2018), Ping-Pong-Game-JavaScript [
+    const user = {
+    x : 0, // left side of canvas
+    y : (canvas.height - 100)/2, // -100 the height of paddle
+    width : 10,
+    height : 100,
+    score : 0,
+    color : "WHITE"
+}
+    ]. https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript/blob/master/pong.js
+
+
+Code Explained (2018), Ping-Pong-Game-JavaScript [
+   function drawArc(x, y, r, color){
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2,true);
+    ctx.closePath();
+    ctx.fill();
+}
+    ]. https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript/blob/master/pong.js
+
+
+Code Explained (2018), Ping-Pong-Game-JavaScript [
+   const ball = {
+    x : canvas.width/2,
+    y : canvas.height/2,
+    radius : 10,
+    velocityX : 5,
+    velocityY : 5,
+    speed : 7,
+    color : "WHITE"
+}
+    ]. https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript/blob/master/pong.js
+
+
+Code Explained (2018), Ping-Pong-Game-JavaScript [
+   const net = {
+    x : (canvas.width - 2)/2,
+    y : 0,
+    height : 10,
+    width : 2,
+    color : "WHITE"
+}
+    ]. https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript/blob/master/pong.js
+
+
+Code Explained (2018), Ping-Pong-Game-JavaScript [
+   function drawNet(){
+    for(let i = 0; i <= canvas.height; i+=15){
+        drawRect(net.x, net.y + i, net.width, net.height, net.color);
+    }
+}
+    ]. https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript/blob/master/pong.js
+
+
+Code Explained (2018), Ping-Pong-Game-JavaScript [
+   function resetBall(){
+    ball.x = canvas.width/2;
+    ball.y = canvas.height/2;
+    ball.velocityX = -ball.velocityX;
+    ball.speed = 7;
+}
+    ]. https://github.com/CodeExplainedRepo/Ping-Pong-Game-JavaScript/blob/master/pong.js
+
+
+MDN contributors (last modified: 2023), Paddle and keyboard controls [
+    let rightPressed = false;
+    let leftPressed = false;
+
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+
+    function keyDownHandler(e) {
+  if (e.key === "Right" || e.key === "ArrowRight") {
+    rightPressed = true;
+  } else if (e.key === "Left" || e.key === "ArrowLeft") {
+    leftPressed = true;
+  }
+}
+
+    function keyUpHandler(e) {
+  if (e.key === "Right" || e.key === "ArrowRight") {
+    rightPressed = false;
+  } else if (e.key === "Left" || e.key === "ArrowLeft") {
+    leftPressed = false;
+  }
+}
+
+    if (rightPressed) {
+  paddleX += 7;
+} else if (leftPressed) {
+  paddleX -= 7;
+}
+
+    if (rightPressed) {
+  paddleX = Math.min(paddleX + 7, canvas.width - paddleWidth);
+} else if (leftPressed) {
+  paddleX = Math.max(paddleX - 7, 0);
+}
+]. https://github.com/mdn/content/blob/main/files/en-us/games/tutorials/2d_breakout_game_pure_javascript/paddle_and_keyboard_controls/index.md
+
+
+MDN contributors (last modified: 2023), Bounce off the walls [
+    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+  dx = -dx;
+}
+if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
+  dy = -dy;
+}
+
+    x += dx;
+    y += dy;
+
+    setInterval(draw, 10);
+]. https://github.com/mdn/content/blob/main/files/en-us/games/tutorials/2d_breakout_game_pure_javascript/bounce_off_the_walls/index.md?plain=1
+
+
+MDN contributors (last modified: 2023), Game Over [
+   if (y + dy < ballRadius) {
+  dy = -dy;
+} else if (y + dy > canvas.height - ballRadius) {
+  if (x > paddleX && x < paddleX + paddleWidth) {
+    dy = -dy;
+  } else {
+    alert("GAME OVER");
+    document.location.reload();
+    clearInterval(interval);
+  }
+}
+]. https://github.com/mdn/content/blob/main/files/en-us/games/tutorials/2d_breakout_game_pure_javascript/game_over/index.md?plain=1
+
+
+MDN contributors (last modified: 2023), Collision detection [
+   function collisionDetection() {
+  for (let c = 0; c < brickColumnCount; c++) {
+    for (let r = 0; r < brickRowCount; r++) {
+      const b = bricks[c][r];
+      if (b.status === 1) {
+        if (
+          x > b.x &&
+          x < b.x + brickWidth &&
+          y > b.y &&
+          y < b.y + brickHeight
+        ) {
+          dy = -dy;
+          b.status = 0;
+        }
+      }
+    }
+  }
+}
+]. https://github.com/mdn/content/blob/main/files/en-us/games/tutorials/2d_breakout_game_pure_javascript/collision_detection/index.md?plain=1
+
+
+MDN contributors (last modified: 2023), Track the score and win [
+   function drawScore() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText(`Score: ${score}`, 8, 20);
+}
+
+score++;
+]. https://github.com/mdn/content/blob/main/files/en-us/games/tutorials/2d_breakout_game_pure_javascript/track_the_score_and_win/index.md?plain=1
+
+
+
+
+
+
+    
